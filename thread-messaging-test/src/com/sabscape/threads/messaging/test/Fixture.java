@@ -12,8 +12,8 @@ import java.util.concurrent.TimeUnit;
 import com.lmax.disruptor.YieldingWaitStrategy;
 
 public class Fixture {
-	private static final int NUM_MANU_UNITS = 1000;//100;//10000000;//1000
-	private static final int QUEUE_SIZE = 1024;//1024;512;4096;16
+	private static final int NUM_MANU_UNITS = 10000000;//100;//10000000;//1000
+	private static final int QUEUE_SIZE = 4096;//1024;512;4096;16
 	private static final boolean SIMULATE_PROCESSING = true;
 	
 	public static void main(String[] args) {
@@ -27,12 +27,12 @@ public class Fixture {
 			out.println("Trying with " + numConsumers + " consumers");
 			timings.append(numConsumers);
 			double execTime = 0;
-//			out.println("Synchronized");
-//			execTime = executeWithNonDisruptorPipeline(numConsumers, new Pipeline<Carbon>(QUEUE_SIZE));
-//			timings.append(",").append(execTime);
-//			out.println("BlockingQueue");
-//			execTime = executeWithNonDisruptorPipeline(numConsumers, new BlockingQueuePipe<Carbon>(QUEUE_SIZE));
-//			timings.append(",").append(execTime);
+			out.println("Synchronized");
+			execTime = executeWithNonDisruptorPipeline(numConsumers, new MessagePipeSynchronizedImpl<Carbon>(QUEUE_SIZE));
+			timings.append(",").append(execTime);
+			out.println("BlockingQueue");
+			execTime = executeWithNonDisruptorPipeline(numConsumers, new MessagePipeBlockingQueueImpl<Carbon>(QUEUE_SIZE));
+			timings.append(",").append(execTime);
 			out.println("TransferQueue");
 			execTime = executeWithNonDisruptorPipeline(numConsumers, new MessagePipeTransferQueueImpl<Carbon>(QUEUE_SIZE));
 			timings.append(",").append(execTime);
