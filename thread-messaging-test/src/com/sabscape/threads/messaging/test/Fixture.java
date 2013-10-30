@@ -14,16 +14,12 @@ import com.lmax.disruptor.YieldingWaitStrategy;
 public class Fixture {
 	private static final int NUM_MANU_UNITS = 10000000;//100;//10000000;//1000
 	private static final int QUEUE_SIZE = 4096;//1024;512;4096;16
-	private static final boolean SIMULATE_PROCESSING = true;
+	private static final boolean SIMULATE_PROCESSING = false;
 	
 	public static void main(String[] args) {
 		int numConsumers = 1;
 		StringBuilder timings = new StringBuilder();
 		while (numConsumers <= 5) {
-			if (numConsumers != 2) {
-				numConsumers++;
-				continue;
-			}
 			out.println("Trying with " + numConsumers + " consumers");
 			timings.append(numConsumers);
 			double execTime = 0;
@@ -53,7 +49,6 @@ public class Fixture {
 		Thread producerThread = new Thread(producer);
 		producerThread.start();
 		long startTime = System.currentTimeMillis();
-		//out.println("Started threads");
 		try {
 			cdl.await();
 			printStatistics(consumers);
